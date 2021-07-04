@@ -31,7 +31,11 @@ public class CemeteryService {
     }
 
     public ParcelDTO addParcel(CreateParcelCommand command) {
-        Parcel parcel = new Parcel(idGenerator.incrementAndGet(), command.getParcelId(), command.getOwner(), command.getCorpses(), command.getExpirationDate());
+        LocalDate exp = command.getExpirationDate();
+        if(exp == null){
+            exp = LocalDate.now().plusYears(26);
+        }
+        Parcel parcel = new Parcel(idGenerator.incrementAndGet(), command.getParcelId(), command.getOwner(), command.getCorpses(), exp);
         parcels.add(parcel);
 
         return mapper.map(parcel, ParcelDTO.class);
